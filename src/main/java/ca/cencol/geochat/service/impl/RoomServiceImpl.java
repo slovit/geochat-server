@@ -22,7 +22,7 @@ public class RoomServiceImpl implements RoomService {
   private final RoomDao rooms = DaoFactory.createRoomDao();
 
   /**
-   * Stores userId->roomId mapping
+   * Stores userId->roomId mapping test
    */
   private final Map<String, String> usersByRoom = Maps.newHashMap();
 
