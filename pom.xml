@@ -41,7 +41,7 @@
     </dependency>
   </dependencies>
   <build>
-    <finalName>geochat-server</finalName>
+    <finalName>geochat</finalName>
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -52,4 +52,25 @@
       </plugin>
     </plugins>
   </build>
+
+  <!-- Add support for OpenShift deployments -->
+  <profiles>
+    <profile>
+      <id>openshift</id>
+      <build>
+        <finalName>travel</finalName>
+        <plugins>
+          <plugin>
+            <artifactId>maven-war-plugin</artifactId>
+            <version>2.1.1</version>
+            <configuration>
+              <outputDirectory>webapps</outputDirectory>
+              <warName>ROOT</warName>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+
 </project>
