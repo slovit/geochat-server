@@ -13,11 +13,11 @@ public final class ServiceFactory {
   }
   
   public static RoomService createRoomService() {
-    return new RoomServiceImpl();
+    return RoomServiceImpl.getInstance();
   }
   
   public static UsersService createUsersService() {
-    return new UsersServiceImpl();
+    return UsersServiceImpl.getInstance();
   }
 
 }

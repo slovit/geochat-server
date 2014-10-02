@@ -4,7 +4,6 @@ import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.base.Strings.isNullOrEmpty;
 import static java.lang.String.format;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -24,7 +23,7 @@ public class RoomServiceImpl implements RoomService {
   /**
    * Stores userId->roomId mapping
    */
-  private final Map<String, String> usersByRoom = Maps.newHashMap();
+  private Map<String, String> roomsByUsers = Maps.newHashMap();
 
   @Override
   public List<Message> getMessages(String userId, String roomId) {
@@ -38,9 +37,6 @@ public class RoomServiceImpl implements RoomService {
     ChatRoom room = rooms.getRoom(roomId);
     if (room == null) {
       room = createChatRoom(roomId);
-
-      // This is a new room. No messages
-      return Collections.emptyList();
     }
 
     return room.getMessages();
@@ -57,7 +53,7 @@ public class RoomServiceImpl implements RoomService {
   public String getUserRoom(String userId) {
     checkState(!isNullOrEmpty(userId), "userId can't be null or empty");
 
-    return usersByRoom.get(userId);
+    return roomsByUsers.get(userId);
   }
 
   @Override
@@ -77,19 +73,19 @@ public class RoomServiceImpl implements RoomService {
   public void addUserToRoom(String userId, String roomId) {
     checkState(!isNullOrEmpty(userId) && !isNullOrEmpty(roomId), "userId and roomId can't be null or empty");
     removeUserFromRoom(userId);
-    usersByRoom.put(userId, roomId);
+    roomsByUsers.put(userId, roomId);
   }
 
   @Override
   public void removeUserFromRoom(String userId) {
     checkState(!isNullOrEmpty(userId), "userId can't be null or empty");
-    usersByRoom.remove(userId);
+    roomsByUsers.remove(userId);
   }
   
   @Override
   public boolean isCurrentRoom(String userId, String roomId) {
     String userRoom = getUserRoom(userId);
-    if (userRoom != null && !userRoom.equals(roomId)) {
+    if (userRoom == null || !userRoom.equals(roomId)) {
       return false;
     }
     
