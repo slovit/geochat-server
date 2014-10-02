@@ -14,7 +14,7 @@ For project implementation we used following frameworks, libraries and tools:
 
 Development
 ---
-To contribute to the project first create a feature branch either manually or utilize (GitHub Flow)[https://guides.github.com/introduction/flow/index.html] tools. 
+To contribute to the project first create a feature branch either manually or utilize [GitHub Flow](https://guides.github.com/introduction/flow/index.html) tools. 
 To propagate your changes create a [pull request](https://help.github.com/articles/using-pull-requests). Developers who commit to `develop` or `master` branches directly will be severely punished.
 
 Setup
@@ -26,7 +26,7 @@ Clone the repository
 Eclipse Setup
 ---
 
-The projects depends on (Project Lombok)[http://projectlombok.org/index.html]. Please install it before importing the project.
+The projects depends on [Project Lombok](http://projectlombok.org/index.html). Please install it before importing the project.
 Follow the [instructions](http://projectlombok.org/features/index.html) in the chapter `Running Lombok \ On eclipse`
 
 Import the project as existing maven project. From Eclipse do:
