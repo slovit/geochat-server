@@ -15,14 +15,15 @@ import ca.cencol.geochat.service.RoomService;
 import ca.cencol.geochat.service.ServiceFactory;
 
 @Path("/enter")
-@Api(value = "/enter", description = "Enter room service")
+@Api(value = "/enter", description = "Enter into the chat room")
 @Produces(MediaType.APPLICATION_JSON)
 public class EnterRoomResource {
 
   private final RoomService roomService = ServiceFactory.createRoomService();
 
   @GET
-  @ApiOperation(httpMethod = "GET", value = "Enter the room", notes = "Enter the room and fetch all messages from the room",
+  @ApiOperation(httpMethod = "GET", value = "Enter the chat room",
+      notes = "Enter the chat room and fetch all messages from the room",
       response = EnterRoomResponse.class)
   @Path("/{userId}/{locationId}")
   public EnterRoomResponse getMessages(

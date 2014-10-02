@@ -9,7 +9,11 @@
     <servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
     <init-param>
       <param-name>com.sun.jersey.config.property.packages</param-name>
-      <param-value>ca.cencol.geochat.resource;com.wordnik.swagger.jersey.listing</param-value>
+      <param-value>
+        ca.cencol.geochat.resource;
+        ca.cencol.geochat.mapper;
+        com.wordnik.swagger.jersey.listing
+      </param-value>
     </init-param>
     <init-param>
       <param-name>com.sun.jersey.api.json.POJOMappingFeature</param-name>
