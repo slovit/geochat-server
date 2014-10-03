@@ -23,7 +23,7 @@ public class RoomServiceImpl implements RoomService {
   /**
    * Stores userId->roomId mapping
    */
-  private Map<String, String> roomsByUsers = Maps.newHashMap();
+  private final Map<String, String> roomsByUsers = Maps.newHashMap();
 
   @Override
   public List<Message> getMessages(String userId, String roomId) {
