@@ -1,5 +1,6 @@
 package ca.cencol.geochat.service;
 
+import ca.cencol.geochat.service.impl.PullRequestHistoryServiceImpl;
 import ca.cencol.geochat.service.impl.RoomServiceImpl;
 import ca.cencol.geochat.service.impl.UsersServiceImpl;
 
@@ -20,4 +21,7 @@ public final class ServiceFactory {
     return UsersServiceImpl.getInstance();
   }
 
+  public static PullRequestHistoryService createPullRequestHistoryService() {
+    return PullRequestHistoryServiceImpl.getInstance();
+  }
 }

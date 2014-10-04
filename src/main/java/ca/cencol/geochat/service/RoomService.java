@@ -1,5 +1,6 @@
 package ca.cencol.geochat.service;
 
+import java.util.Date;
 import java.util.List;
 
 import ca.cencol.geochat.model.Message;
@@ -17,6 +18,16 @@ public interface RoomService {
    * @throws IllegalStateException if {@code userId} tries to get messages from not their current {@code roomId}
    */
   List<Message> getMessages(String userId, String roomId);
+
+  /**
+   * Returns {@link Message}s for {@code userId} by {@code roomId} that were posted {@code lastTime}.<br>
+   * If the room does not exist creates a new one and returns an empty list.<br>
+   * If there is no messages posted after the given time returns an empty list.<br>
+   * New messages for the user should be pulled with this service.
+   * 
+   * @throws IllegalStateException if {@code userId} tries to get messages from not their current {@code roomId}
+   */
+  List<Message> getMessages(String userId, String roomId, Date lastTime);
 
   /**
    * Return a roomId a {@link User} is currently assigned to.
@@ -41,7 +52,7 @@ public interface RoomService {
    * Removes {@code userId} from it current room.
    */
   void removeUserFromRoom(String userId);
-  
+
   /**
    * Checks if {@code userId}'s current room is {@code roomId}
    */
