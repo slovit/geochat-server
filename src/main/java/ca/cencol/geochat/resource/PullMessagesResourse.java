@@ -10,6 +10,10 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import com.wordnik.swagger.annotations.Api;
+import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiParam;
+
 import ca.cencol.geochat.model.EnterRoomResponse;
 import ca.cencol.geochat.model.PullRequestRecord;
 import ca.cencol.geochat.service.PullRequestHistoryService;
@@ -17,17 +21,21 @@ import ca.cencol.geochat.service.RoomService;
 import ca.cencol.geochat.service.ServiceFactory;
 
 @Path("/get")
+@Api(value = "/enter", description = "Pull messages service")
+@Produces(MediaType.APPLICATION_JSON)
 public class PullMessagesResourse {
 
   private final RoomService roomService = ServiceFactory.createRoomService();
   private final PullRequestHistoryService requestHistoryService = ServiceFactory.createPullRequestHistoryService();
 
   @GET
+  @ApiOperation(httpMethod = "GET", value = "Get messages", notes = "Fetch new messages from the room",
+        response = Response.class)
   @Path("{userId}/{locationId}")
   @Produces(MediaType.APPLICATION_JSON)
   public Response getMessages(
-      @PathParam("userId") String userId,
-      @PathParam("locationId") String roomId) {
+      @ApiParam(value = "Unique user identifier", required = true) @PathParam("userId") String userId,
+      @ApiParam(value = "Current user location", required = true) @PathParam("locationId") String roomId) {
 
     // check if user already assigned to some other room.
     if (!roomService.isCurrentRoom(userId, roomId)) {

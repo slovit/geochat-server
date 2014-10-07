@@ -55,8 +55,7 @@ public class RoomServiceImpl implements RoomService {
     List<Message> filteredMessages = Lists.newArrayList();
 
     for (Message msg : messages) {
-      if (msg.getTime().after(time))
-      {
+      if (msg.getTime().after(time)) {
         filteredMessages.add(msg);
       }
     }
