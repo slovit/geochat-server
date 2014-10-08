@@ -18,7 +18,7 @@ public class PullRequestRecordDaoMemoryImpl implements PullRequestRecordDao {
   private static final PullRequestRecordDaoMemoryImpl INSTANCE = new PullRequestRecordDaoMemoryImpl();
 
   private final Map<String, PullRequestRecord> recordsByUsers = Maps.newHashMap();
-  
+
   private PullRequestRecordDaoMemoryImpl() {
   }
 
@@ -29,7 +29,7 @@ public class PullRequestRecordDaoMemoryImpl implements PullRequestRecordDao {
     checkState(!isNullOrEmpty(userId), "userId can't be null or empry");
     recordsByUsers.put(userId, record);
   }
-  
+
   @Override
   public void deleteRecord(String userId) {
     checkState(!isNullOrEmpty(userId), "userId can't be null or empty");

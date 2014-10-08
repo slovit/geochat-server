@@ -13,6 +13,8 @@ import com.google.common.collect.Maps;
 
 import ca.cencol.geochat.dao.DaoFactory;
 import ca.cencol.geochat.dao.RoomDao;
+import ca.cencol.geochat.mapper.ForbiddenException;
+import ca.cencol.geochat.mapper.NotFoundException;
 import ca.cencol.geochat.model.ChatRoom;
 import ca.cencol.geochat.model.Message;
 import ca.cencol.geochat.service.RoomService;
@@ -39,7 +41,7 @@ public class RoomServiceImpl implements RoomService {
     checkState(!isNullOrEmpty(roomId), "Null or empty roomId");
 
     if (!isCurrentRoom(userId, roomId)) {
-      throw new IllegalStateException(format("User %s tried to get messages for incorrect room %s", userId, roomId));
+      throw new NotFoundException(format("User %s is not registered in room %s", userId, roomId));
     }
 
     // Get messages for user
@@ -82,7 +84,7 @@ public class RoomServiceImpl implements RoomService {
         "One of the arguments is null or empty");
 
     if (!isCurrentRoom(userId, roomId)) {
-      throw new IllegalArgumentException(format("%s tried to post wrong room %s", userId, roomId));
+      throw new ForbiddenException(format("%s tried to post wrong room %s", userId, roomId));
     }
 
     ChatRoom room = rooms.getRoom(roomId);

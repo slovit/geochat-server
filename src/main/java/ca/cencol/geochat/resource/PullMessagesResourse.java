@@ -30,7 +30,7 @@ public class PullMessagesResourse {
 
   @GET
   @ApiOperation(httpMethod = "GET", value = "Get messages", notes = "Fetch new messages from the room",
-        response = Response.class)
+      response = Response.class)
   @Path("{userId}/{locationId}")
   @Produces(MediaType.APPLICATION_JSON)
   public Response getMessages(

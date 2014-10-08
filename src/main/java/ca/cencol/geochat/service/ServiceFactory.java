@@ -4,19 +4,18 @@ import ca.cencol.geochat.service.impl.PullRequestHistoryServiceImpl;
 import ca.cencol.geochat.service.impl.RoomServiceImpl;
 import ca.cencol.geochat.service.impl.UsersServiceImpl;
 
-
 /**
  * Factory for services creation.
  */
 public final class ServiceFactory {
-  
+
   private ServiceFactory() {
   }
-  
+
   public static RoomService createRoomService() {
     return RoomServiceImpl.getInstance();
   }
-  
+
   public static UsersService createUsersService() {
     return UsersServiceImpl.getInstance();
   }
@@ -24,4 +23,5 @@ public final class ServiceFactory {
   public static PullRequestHistoryService createPullRequestHistoryService() {
     return PullRequestHistoryServiceImpl.getInstance();
   }
+
 }
