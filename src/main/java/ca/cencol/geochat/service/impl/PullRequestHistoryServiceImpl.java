@@ -8,7 +8,6 @@ import java.util.Date;
 import ca.cencol.geochat.dao.DaoFactory;
 import ca.cencol.geochat.dao.PullRequestRecordDao;
 import ca.cencol.geochat.model.PullRequestRecord;
-import ca.cencol.geochat.model.User;
 import ca.cencol.geochat.service.PullRequestHistoryService;
 
 public class PullRequestHistoryServiceImpl implements PullRequestHistoryService {
