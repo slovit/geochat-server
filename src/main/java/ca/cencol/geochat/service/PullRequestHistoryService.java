@@ -18,9 +18,10 @@ public interface PullRequestHistoryService {
    * Returns {@link PullRequestRecord} by {@code userId}
    */
   PullRequestRecord getPullRequestRecord(String userId);
-  
+
   /**
-   * Resets pull request history for a given {@code userId}.
+   * Resets pull request history for the given {@code userId}.
    */
   void resetPullRequestHistory(String userId);
+
 }
