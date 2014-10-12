@@ -13,6 +13,8 @@ import javax.ws.rs.core.MediaType;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
+import com.wordnik.swagger.annotations.ApiResponse;
+import com.wordnik.swagger.annotations.ApiResponses;
 
 import ca.cencol.geochat.mapper.ForbiddenException;
 import ca.cencol.geochat.model.EnterRoomResponse;
@@ -32,6 +34,8 @@ public class PullMessagesResourse {
   @GET
   @ApiOperation(httpMethod = "GET", value = "Get messages", notes = "Fetch new messages from the room",
       response = EnterRoomResponse.class)
+  @ApiResponses(value = {
+      @ApiResponse(code = 403, message = "User does not belong to the room")})
   @Path("/{userId}/{locationId}")
   @Produces(MediaType.APPLICATION_JSON)
   public EnterRoomResponse getMessages(
