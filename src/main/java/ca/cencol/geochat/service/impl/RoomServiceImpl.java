@@ -45,10 +45,7 @@ public class RoomServiceImpl implements RoomService {
     }
 
     // Get messages for user
-    ChatRoom room = rooms.getRoom(roomId);
-    if (room == null) {
-      room = createChatRoom(roomId);
-    }
+    ChatRoom room = checkAndCreateChatRoom(roomId);
 
     return getMessagesAfterTime(room.getMessages(), lastTime);
   }
@@ -64,11 +61,14 @@ public class RoomServiceImpl implements RoomService {
     return filteredMessages;
   }
 
-  private ChatRoom createChatRoom(String locationId) {
-    ChatRoom result = new ChatRoom(locationId);
-    rooms.addRoom(result);
+  private ChatRoom checkAndCreateChatRoom(String locationId) {
+    ChatRoom room = rooms.getRoom(locationId);
+    if (room == null) {
+      room = new ChatRoom(locationId);
+      rooms.addRoom(room);
+    }
 
-    return result;
+    return room;
   }
 
   @Override
@@ -95,6 +95,7 @@ public class RoomServiceImpl implements RoomService {
   public void addUserToRoom(String userId, String roomId) {
     checkState(!isNullOrEmpty(userId) && !isNullOrEmpty(roomId), "userId and roomId can't be null or empty");
     removeUserFromRoom(userId);
+    checkAndCreateChatRoom(roomId);
     roomsByUsers.put(userId, roomId);
   }
 
