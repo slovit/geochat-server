@@ -29,6 +29,9 @@ public class RoomServiceImpl implements RoomService {
    */
   private final Map<String, String> roomsByUsers = Maps.newHashMap();
 
+  private RoomServiceImpl() {
+  }
+
   @Override
   public List<Message> getMessages(String userId, String roomId) {
 

@@ -7,10 +7,8 @@ import java.util.List;
 
 import org.junit.Test;
 
-import ca.cencol.geochat.dao.RoomDao;
-import ca.cencol.geochat.dao.memory.RoomDaoMemoryImpl;
+import ca.cencol.geochat.mapper.ForbiddenException;
 import ca.cencol.geochat.mapper.NotFoundException;
-import ca.cencol.geochat.model.ChatRoom;
 import ca.cencol.geochat.model.Message;
 import ca.cencol.geochat.service.RoomService;
 import ca.cencol.geochat.service.impl.RoomServiceImpl;
@@ -64,9 +62,8 @@ public class RoomServiceImplTest {
   }
 
   @Test(expected = NotFoundException.class)
-  public void testGetMessagesNotRegistered() {
+  public void testGetMessagesException() {
     roomService.getMessages(user1Room1, roomId2);
-
   }
 
   @Test
@@ -77,27 +74,49 @@ public class RoomServiceImplTest {
 
   @Test
   public void testPostMessage() {
-    // TODO
+    String uid = "userPost";
+    String roomId = "roomPostId";
+    roomService.addUserToRoom(uid, roomId);
+    List<Message> msgList = roomService.getMessages(uid, roomId);
+    int msgNumBefore = msgList.size();
+    roomService.postMessage(uid, roomId, "xoxo");
+    msgList = roomService.getMessages(uid, roomId);
+    int msgNumAfter = msgList.size();
+    assertEquals(msgNumBefore + 1, msgNumAfter);
+  }
+
+  @Test(expected = ForbiddenException.class)
+  public void testPostMessageException() {
+    roomService.postMessage(user3Room2, roomId1, "xoxo");
   }
 
   @Test
-  public void testAddUserToRoom() {
-    // TODO
-  }
-
-  @Test
-  public void testRemoveUserFromRoom() {
-    // TODO
+  public void testAddAndRemoveUserToRoom() {
+    String uid = "userAddToRoom";
+    String roomId = "roomAdd";
+    boolean thrown = false;
+    try {
+      roomService.postMessage(uid, roomId, "xoxo");
+    } catch (ForbiddenException e) {
+      thrown = true;
+    }
+    assertTrue(thrown);
+    roomService.addUserToRoom(uid, roomId);
+    roomService.postMessage(uid, roomId, "xoxo");
   }
 
   @Test
   public void testIsCurrentRoom() {
-    // TODO
+    assertTrue(roomService.isCurrentRoom(user1Room1, roomId1));
+    assertFalse(roomService.isCurrentRoom(user1Room1, roomId2));
   }
 
   @Test
   public void testGetInstance() {
-    // TODO
+    RoomService instance1 = RoomServiceImpl.getInstance();
+    RoomService instance2 = RoomServiceImpl.getInstance();
+    assertNotNull(instance1);
+    assertEquals(instance1, instance2);
   }
 
 }
