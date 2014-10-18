@@ -15,6 +15,9 @@ public class PullRequestHistoryServiceImpl implements PullRequestHistoryService 
   private static final PullRequestHistoryServiceImpl INSTANCE = new PullRequestHistoryServiceImpl();
   private final PullRequestRecordDao pullRequestDao = DaoFactory.createPullRequestRecordDao();
 
+  private PullRequestHistoryServiceImpl() {
+  }
+
   @Override
   public void updatePullRequestRecord(String userId, Date time) {
     checkState(!isNullOrEmpty(userId) && (time != null));
