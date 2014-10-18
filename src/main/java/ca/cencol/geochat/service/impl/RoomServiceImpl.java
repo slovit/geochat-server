@@ -30,6 +30,9 @@ public class RoomServiceImpl implements RoomService {
    */
   private final Map<String, String> roomsByUsers = Maps.newHashMap();
 
+  private RoomServiceImpl() {
+  }
+
   @Override
   public Collection<Message> getMessages(String userId, String roomId) {
 
