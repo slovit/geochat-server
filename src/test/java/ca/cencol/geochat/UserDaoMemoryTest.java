@@ -15,10 +15,10 @@ public class UserDaoMemoryTest {
   public void testAddUser() {
     UserDao userDao = UserDaoMemoryImpl.getInstance();
     String uid = "user_1";
-    User user = userDao.getUser(uid);
+    User user = userDao.getById(uid);
     assertNull(user);
     userDao.addUser(User.builder().userId(uid).username("nickname").build());
-    user = userDao.getUser(uid);
+    user = userDao.getById(uid);
     assertNotNull(user);
     assertEquals(uid, user.getUserId());
   }
@@ -33,17 +33,17 @@ public class UserDaoMemoryTest {
   public void testGetUser() {
     UserDao userDao = UserDaoMemoryImpl.getInstance();
     String uid = "user_2";
-    User user1 = userDao.getUser(uid);
+    User user1 = userDao.getById(uid);
     assertNull(user1);
     userDao.addUser(User.builder().userId(uid).username("nickname2").build());
-    User user2 = userDao.getUser(uid);
+    User user2 = userDao.getById(uid);
     assertNotNull(user2);
   }
   
   @Test(expected = IllegalStateException.class)
   public void testGetUserIllegalArgument() {
     UserDao userDao = UserDaoMemoryImpl.getInstance();
-    userDao.getUser(null);
+    userDao.getById(null);
   }
 
   @Test

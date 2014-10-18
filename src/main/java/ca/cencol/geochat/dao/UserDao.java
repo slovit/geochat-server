@@ -12,8 +12,17 @@ public interface UserDao {
   
   /**
    * Retrieves {@link User}
+   * 
+   * @return null if user was not found
    */
-  User getUser(String userId);
+  User getById(String userId);
+  
+  /**
+   * Finds a {@link User} by {@code email}.
+   * 
+   * @return null if user was not found
+   */
+  User getByEmail(String email);
   
   /**
    * Returns number of registered users with {@code username}

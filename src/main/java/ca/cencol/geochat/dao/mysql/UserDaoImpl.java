@@ -18,7 +18,8 @@ public class UserDaoImpl implements UserDao {
 
   private static final String INSERT_USER = format("insert into User (%s, %s, %s, %s) values (?, ?, ?, ?)",
       USER_ID, USERNAME, EMAIL, PASSWORD);
-  private static final String SELECT_USER = format("select * from User where %s = ?", USER_ID);
+  private static final String SELECT_BY_ID = format("select * from User where %s = ?", USER_ID);
+  private static final String SELECT_BY_EMAIL = format("select * from User where %s = ?", EMAIL);
   private static final String COUNT_BY_EMAIL = format("select count(*) as total from User where %s = ?", EMAIL);
   private static final String COUNT_BY_USERNAME = format("select count(*) as total from User where %s = ?", USERNAME);
 
@@ -37,10 +38,19 @@ public class UserDaoImpl implements UserDao {
   }
 
   @Override
+  public User getById(@NonNull String userId) {
+    return getUserByQuery(SELECT_BY_ID, userId);
+  }
+  
+  @Override
+  public User getByEmail(@NonNull String email) {
+    return getUserByQuery(SELECT_BY_EMAIL, email);
+  }
+  
   @SneakyThrows
-  public User getUser(@NonNull String userId) {
-    val selectStmt = connectionManager.getConnection().prepareStatement(SELECT_USER);
-    selectStmt.setString(1, userId);
+  private User getUserByQuery(String query, String searchParameter) {
+    val selectStmt = connectionManager.getConnection().prepareStatement(query);
+    selectStmt.setString(1, searchParameter);
     val resultSet = selectStmt.executeQuery();
 
     return createUser(resultSet);
