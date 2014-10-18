@@ -2,8 +2,8 @@ package ca.cencol.geochat;
 
 import static org.junit.Assert.*;
 
+import java.util.Collection;
 import java.util.Date;
-import java.util.List;
 
 import org.junit.Test;
 
@@ -53,7 +53,7 @@ public class RoomServiceImplTest {
 
   @Test
   public void testGetMessages() {
-    List<Message> msgList = roomService.getMessages(user1Room1, roomId1);
+    Collection<Message> msgList = roomService.getMessages(user1Room1, roomId1);
     assertEquals(2, msgList.size());
     msgList = roomService.getMessages(user1Room1, roomId1, date2);
     assertEquals(1, msgList.size());
@@ -77,7 +77,7 @@ public class RoomServiceImplTest {
     String uid = "userPost";
     String roomId = "roomPostId";
     roomService.addUserToRoom(uid, roomId);
-    List<Message> msgList = roomService.getMessages(uid, roomId);
+    Collection<Message> msgList = roomService.getMessages(uid, roomId);
     int msgNumBefore = msgList.size();
     roomService.postMessage(uid, roomId, "xoxo");
     msgList = roomService.getMessages(uid, roomId);

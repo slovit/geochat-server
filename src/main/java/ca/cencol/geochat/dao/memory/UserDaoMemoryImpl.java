@@ -5,22 +5,25 @@ import static com.google.common.base.Strings.isNullOrEmpty;
 
 import java.util.Map;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+
 import com.google.common.collect.Maps;
 
 import ca.cencol.geochat.dao.UserDao;
 import ca.cencol.geochat.model.User;
 
 /**
- * An in-memory implementation of the {@link UserDao}
+ * An in-memory implementation of the {@link UserDao}.<br>
+ * <b>Deprecated:</b> Use MySQL instance instead.
  */
+@Deprecated
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class UserDaoMemoryImpl implements UserDao {
 
   private static final UserDaoMemoryImpl INSTANCE = new UserDaoMemoryImpl();
-
   private final Map<String, User> users = Maps.newHashMap();
-
-  private UserDaoMemoryImpl() {
-  }
 
   @Override
   public void addUser(User user) {
@@ -31,7 +34,7 @@ public class UserDaoMemoryImpl implements UserDao {
   }
 
   @Override
-  public User getUser(String userId) {
+  public User getById(String userId) {
     checkState(!isNullOrEmpty(userId), "userId can't be null or empty");
 
     return users.get(userId);
@@ -39,6 +42,21 @@ public class UserDaoMemoryImpl implements UserDao {
 
   public static UserDao getInstance() {
     return INSTANCE;
+  }
+
+  @Override
+  public int countByUsername(@NonNull String username) {
+    throw new UnsupportedOperationException();
+  }
+
+  @Override
+  public int countByEmail(@NonNull String email) {
+    throw new UnsupportedOperationException();
+  }
+
+  @Override
+  public User getByEmail(String email) {
+    throw new UnsupportedOperationException();
   }
 
 }

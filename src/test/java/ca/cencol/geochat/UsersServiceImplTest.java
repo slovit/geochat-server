@@ -1,9 +1,11 @@
 package ca.cencol.geochat;
 
 import static org.junit.Assert.*;
+import lombok.val;
 
 import org.junit.Test;
 
+import ca.cencol.geochat.model.RegistrationUser;
 import ca.cencol.geochat.model.User;
 import ca.cencol.geochat.service.UsersService;
 import ca.cencol.geochat.service.impl.UsersServiceImpl;
@@ -18,10 +20,12 @@ public class UsersServiceImplTest {
     User user = service.getUser(userId);
     assertNull(user);
     // register the user
-    service.registerUser(userId, nickname);
+    val registrationInfo = new RegistrationUser();
+    registrationInfo.setUsername(nickname);
+    service.registerUser(registrationInfo);
     user = service.getUser(userId);
     assertNotNull(user);
-    assertEquals(nickname, user.getNickname());
+    assertEquals(nickname, user.getUsername());
   }
 
   @Test

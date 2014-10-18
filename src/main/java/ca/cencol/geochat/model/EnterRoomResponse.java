@@ -1,6 +1,6 @@
 package ca.cencol.geochat.model;
 
-import java.util.List;
+import java.util.Collection;
 
 import com.wordnik.swagger.annotations.ApiModel;
 import com.wordnik.swagger.annotations.ApiModelProperty;
@@ -11,9 +11,9 @@ public class EnterRoomResponse {
   @ApiModelProperty(value = "roomId or locationId", required = true)
   private final String roomId;
   @ApiModelProperty(value = "All room messages", required = true)
-  private final List<Message> messages;
+  private final Collection<Message> messages;
 
-  public EnterRoomResponse(String roomId, List<Message> messages) {
+  public EnterRoomResponse(String roomId, Collection<Message> messages) {
     super();
     this.roomId = roomId;
     this.messages = messages;
@@ -23,7 +23,7 @@ public class EnterRoomResponse {
     return roomId;
   }
 
-  public List<Message> getMessages() {
+  public Collection<Message> getMessages() {
     return messages;
   }
 

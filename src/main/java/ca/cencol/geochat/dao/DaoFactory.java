@@ -1,8 +1,8 @@
 package ca.cencol.geochat.dao;
 
 import ca.cencol.geochat.dao.memory.RoomDaoMemoryImpl;
-import ca.cencol.geochat.dao.memory.UserDaoMemoryImpl;
 import ca.cencol.geochat.dao.memory.PullRequestRecordDaoMemoryImpl;
+import ca.cencol.geochat.dao.mysql.UserDaoImpl;
 
 
 public final class DaoFactory {
@@ -15,7 +15,7 @@ public final class DaoFactory {
   }
   
   public static UserDao createUserDao() {
-    return UserDaoMemoryImpl.getInstance();
+    return UserDaoImpl.getInstance();
   }
   
   public static PullRequestRecordDaoMemoryImpl createPullRequestRecordDao() {

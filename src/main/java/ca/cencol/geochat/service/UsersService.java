@@ -1,5 +1,7 @@
 package ca.cencol.geochat.service;
 
+import ca.cencol.geochat.model.LoginRequest;
+import ca.cencol.geochat.model.RegistrationUser;
 import ca.cencol.geochat.model.User;
 
 /**
@@ -10,11 +12,21 @@ public interface UsersService {
   /**
    * Creates a new {@link User} and persists it.
    */
-  void registerUser(String userId, String nickname);
+  String registerUser(RegistrationUser user);
 
   /**
    * Retrieve {@link User} by {@code userId}
    */
   User getUser(String userId);
+  
+  /**
+   * Checks if {@code userId} is registered with the system.
+   */
+  boolean isRegistered(String userId);
+  
+  /**
+   * Logins {@link User}
+   */
+  String loginUser(LoginRequest user);
 
 }

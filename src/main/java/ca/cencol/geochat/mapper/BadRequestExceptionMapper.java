@@ -7,14 +7,12 @@ import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
 @Provider
-public class NoFoundExceptionMapper implements ExceptionMapper<NotFoundException> {
-  
-  private final static Status NOT_FOUND = Status.NOT_FOUND;
+public class BadRequestExceptionMapper implements ExceptionMapper<BadRequestException> {
 
   @Override
-  public Response toResponse(NotFoundException exception) {
+  public Response toResponse(BadRequestException exception) {
     return Response
-        .status(NOT_FOUND)
+        .status(Status.BAD_REQUEST)
         .type(MediaType.TEXT_PLAIN)
         .entity(exception.getMessage())
         .build();

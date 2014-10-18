@@ -1,5 +1,7 @@
 package ca.cencol.geochat.resource;
 
+import static java.lang.String.format;
+
 import java.util.Date;
 
 import javax.ws.rs.GET;
@@ -12,11 +14,13 @@ import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 
+import ca.cencol.geochat.mapper.ForbiddenException;
 import ca.cencol.geochat.model.EnterRoomResponse;
 import ca.cencol.geochat.model.PullRequestRecord;
 import ca.cencol.geochat.service.PullRequestHistoryService;
 import ca.cencol.geochat.service.RoomService;
 import ca.cencol.geochat.service.ServiceFactory;
+import ca.cencol.geochat.service.UsersService;
 
 @Path("/enter")
 @Api(value = "/enter", description = "Enter into the chat room")
@@ -25,6 +29,7 @@ public class EnterRoomResource {
 
   private final RoomService roomService = ServiceFactory.createRoomService();
   private final PullRequestHistoryService requestHistoryService = ServiceFactory.createPullRequestHistoryService();
+  private final UsersService userService = ServiceFactory.createUsersService();
 
   @GET
   @ApiOperation(httpMethod = "GET", value = "Enter the chat room",
@@ -36,6 +41,10 @@ public class EnterRoomResource {
       @ApiParam(value = "Unique user identifier", required = true) @PathParam("userId") String userId,
       @ApiParam(value = "Current user location", required = true) @PathParam("locationId") String roomId) {
 
+    if (!userService.isRegistered(userId)) {
+      throw new ForbiddenException(format("User %s is not registered", userId));
+    }
+    
     PullRequestRecord record = requestHistoryService.getPullRequestRecord(userId);
 
     // update pull request history for the user
