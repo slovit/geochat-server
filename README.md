@@ -23,6 +23,17 @@ Setup
 Clone the repository
 `git clone https://github.com/slovit/geochat-server.git`
 
+### MySQL
+- Install MySQL
+- Create users and databases
+```sql
+create database geochat;
+GRANT ALL PRIVILEGES ON geochat.* to geoserver@localhost identified by 'serverpass';
+```
+
+Run script `src/main/sql/setup.sql` to create required database objects. 
+
+
 Eclipse Setup
 ---
 
