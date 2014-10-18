@@ -34,7 +34,7 @@ public class UserDaoMemoryImpl implements UserDao {
   }
 
   @Override
-  public User getUser(String userId) {
+  public User getById(String userId) {
     checkState(!isNullOrEmpty(userId), "userId can't be null or empty");
 
     return users.get(userId);
@@ -51,6 +51,11 @@ public class UserDaoMemoryImpl implements UserDao {
 
   @Override
   public int countByEmail(@NonNull String email) {
+    throw new UnsupportedOperationException();
+  }
+
+  @Override
+  public User getByEmail(String email) {
     throw new UnsupportedOperationException();
   }
 

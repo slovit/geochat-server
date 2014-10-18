@@ -11,6 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import ca.cencol.geochat.dao.DaoFactory;
 import ca.cencol.geochat.dao.UserDao;
 import ca.cencol.geochat.mapper.BadRequestException;
+import ca.cencol.geochat.mapper.ForbiddenException;
+import ca.cencol.geochat.model.LoginRequest;
 import ca.cencol.geochat.model.RegistrationUser;
 import ca.cencol.geochat.model.User;
 import ca.cencol.geochat.service.UsersService;
@@ -28,7 +30,11 @@ public class UsersServiceImpl implements UsersService {
   public String registerUser(@NonNull RegistrationUser user) {
     log.info("Registering user {}", user);
     checkUsername(user.getUsername());
+    checkUsernameUniqueness(user.getUsername());
+    
     checkEmail(user.getEmail());
+    checkEmailUniqueness(user.getEmail());
+    
     checkPassword(user.getPassword());
     
 
@@ -53,13 +59,11 @@ public class UsersServiceImpl implements UsersService {
   private void checkEmail(String email) {
     checkUserState(email != null, "Missing email field");
     checkUserState(!email.isEmpty(), "Email can't be empty");
-    checkEmailUniqueness(email);
   }
 
   private void checkUsername(String username) {
     checkUserState(username != null, "Missing username field");
     checkUserState(!username.isEmpty(), "Username can't be empty");
-    checkUsernameUniqueness(username);
   }
 
   private void checkUsernameUniqueness(@NonNull String username) {
@@ -76,7 +80,7 @@ public class UsersServiceImpl implements UsersService {
   public User getUser(@NonNull String userId) {
     checkState(!userId.isEmpty(), "userId can't be empty");
 
-    return USER_DAO.getUser(userId);
+    return USER_DAO.getById(userId);
   }
 
   public static UsersServiceImpl getInstance() {
@@ -93,9 +97,35 @@ public class UsersServiceImpl implements UsersService {
   @Override
   public boolean isRegistered(@NonNull String userId) {
     checkState(!userId.isEmpty(), "userId can't be empty");
-    val user = USER_DAO.getUser(userId);
+    val user = USER_DAO.getById(userId);
     
     return user == null ? false : true;
+  }
+
+  @Override
+  public String loginUser(LoginRequest loginInfo) {
+    val email = loginInfo.getEmail();
+    log.info("Login request from user '{}'", email);
+    checkEmail(email);
+    checkPassword(loginInfo.getPassword());
+    
+    val user = USER_DAO.getByEmail(email);
+    if (user == null) {
+      denyLogin(format("Have not found user with email: '%s'", email));
+    } else if (!isValidPassword(user, loginInfo)) {
+      denyLogin(format("User '%s' entered invalid password", email));
+    }
+    
+    return user.getUserId();
+  }
+  
+  private static boolean isValidPassword(User user, LoginRequest loginInfo) {
+    return user.getPassword().equals(loginInfo.getPassword());
+  }
+  
+  private static void denyLogin(String logMessage) {
+    log.info(logMessage);
+    throw new ForbiddenException("Login credentials are incorrect");
   }
 
 }
