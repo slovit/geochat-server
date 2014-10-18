@@ -43,28 +43,28 @@ public class UsersServiceImpl implements UsersService {
   }
 
   private void checkPassword(String password) {
-    checkRegistrationState(password != null, "Missing password field");
+    checkUserState(password != null, "Missing password field");
   }
 
   private void checkEmail(String email) {
-    checkRegistrationState(email != null, "Missing email field");
+    checkUserState(email != null, "Missing email field");
     checkEmailUniqueness(email);
   }
 
   private void checkUsername(String username) {
-    checkRegistrationState(username != null, "Missing username field");
+    checkUserState(username != null, "Missing username field");
     checkUsernameUniqueness(username);
   }
 
   private void checkUsernameUniqueness(@NonNull String username) {
-    checkRegistrationState(!username.isEmpty(), "Username can't be empty");
-    checkRegistrationState(USER_DAO.countByUsername(username) == 0,
+    checkUserState(!username.isEmpty(), "Username can't be empty");
+    checkUserState(USER_DAO.countByUsername(username) == 0,
         format("Username %s is already registered", username));
   }
 
   private void checkEmailUniqueness(@NonNull String email) {
-    checkRegistrationState(!email.isEmpty(), "Email can't be empty");
-    checkRegistrationState(USER_DAO.countByEmail(email) == 0,
+    checkUserState(!email.isEmpty(), "Email can't be empty");
+    checkUserState(USER_DAO.countByEmail(email) == 0,
         format("Email %s is already used for registration", email));
   }
 
@@ -79,10 +79,18 @@ public class UsersServiceImpl implements UsersService {
     return INSTANCE;
   }
 
-  private static void checkRegistrationState(boolean expression, String message) {
+  private static void checkUserState(boolean expression, String message) {
     if (!expression) {
       throw new BadRequestException(message);
     }
+  }
+
+  @Override
+  public boolean isRegistered(@NonNull String userId) {
+    checkState(!userId.isEmpty(), "userId can't be empty");
+    val user = USER_DAO.getUser(userId);
+    
+    return user == null ? false : true;
   }
 
 }

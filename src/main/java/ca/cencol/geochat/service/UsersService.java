@@ -17,5 +17,10 @@ public interface UsersService {
    * Retrieve {@link User} by {@code userId}
    */
   User getUser(String userId);
+  
+  /**
+   * Checks if {@code userId} is registered with the system.
+   */
+  boolean isRegistered(String userId);
 
 }

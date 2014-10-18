@@ -1,6 +1,5 @@
 package ca.cencol.geochat.model;
 
-import lombok.NonNull;
 import lombok.Value;
 import lombok.experimental.Builder;
 
@@ -8,10 +7,16 @@ import lombok.experimental.Builder;
 @Builder
 public class User {
 
-  @NonNull
   String userId;
   String username;
   String email;
   String password;
+  
+  public boolean isValid() {
+    return userId != null && !userId.isEmpty() && 
+        username != null && !username.isEmpty() &&
+        email !=null && !email.isEmpty() &&
+        password != null && !password.isEmpty();
+  }
 
 }

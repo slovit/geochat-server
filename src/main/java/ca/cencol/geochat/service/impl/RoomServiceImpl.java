@@ -4,6 +4,7 @@ import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.base.Strings.isNullOrEmpty;
 import static java.lang.String.format;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -30,14 +31,14 @@ public class RoomServiceImpl implements RoomService {
   private final Map<String, String> roomsByUsers = Maps.newHashMap();
 
   @Override
-  public List<Message> getMessages(String userId, String roomId) {
+  public Collection<Message> getMessages(String userId, String roomId) {
 
     // return all messages for the user in the room from the "beginning of time"
     return getMessages(userId, roomId, new Date(0));
   }
 
   @Override
-  public List<Message> getMessages(String userId, String roomId, Date lastTime) {
+  public Collection<Message> getMessages(String userId, String roomId, Date lastTime) {
     checkState(!isNullOrEmpty(roomId), "Null or empty roomId");
 
     if (!isCurrentRoom(userId, roomId)) {
@@ -50,7 +51,7 @@ public class RoomServiceImpl implements RoomService {
     return getMessagesAfterTime(room.getMessages(), lastTime);
   }
 
-  private List<Message> getMessagesAfterTime(List<Message> messages, Date time) {
+  private Collection<Message> getMessagesAfterTime(Collection<Message> messages, Date time) {
     List<Message> filteredMessages = Lists.newArrayList();
 
     for (Message msg : messages) {

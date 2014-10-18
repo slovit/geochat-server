@@ -15,7 +15,7 @@ import ca.cencol.geochat.model.User;
 public class UserDaoImpl implements UserDao {
 
   private static final UserDaoImpl INSTANCE = new UserDaoImpl();
-  
+
   private static final String INSERT_USER = format("insert into User (%s, %s, %s, %s) values (?, ?, ?, ?)",
       USER_ID, USERNAME, EMAIL, PASSWORD);
   private static final String SELECT_USER = format("select * from User where %s = ?", USER_ID);
@@ -48,17 +48,18 @@ public class UserDaoImpl implements UserDao {
 
   @SneakyThrows
   private static User createUser(ResultSet resultSet) {
-    val user = User.builder();
+    val userBuilder = User.builder();
 
     while (resultSet.next()) {
-      user.userId(resultSet.getString(USER_ID));
-      user.username(resultSet.getString(USERNAME));
-      user.email(resultSet.getString(EMAIL));
-      user.password(resultSet.getString(PASSWORD));
+      userBuilder.userId(resultSet.getString(USER_ID));
+      userBuilder.username(resultSet.getString(USERNAME));
+      userBuilder.email(resultSet.getString(EMAIL));
+      userBuilder.password(resultSet.getString(PASSWORD));
     }
     resultSet.close();
+    val user = userBuilder.build();
 
-    return user.build();
+    return user.isValid() ? user : null;
   }
 
   @Override
@@ -68,7 +69,7 @@ public class UserDaoImpl implements UserDao {
     stmt.setString(1, username);
     val resultSet = stmt.executeQuery();
     int count = -1;
-    
+
     while (resultSet.next()) {
       count = resultSet.getInt("total");
     }
@@ -84,7 +85,7 @@ public class UserDaoImpl implements UserDao {
     stmt.setString(1, email);
     val resultSet = stmt.executeQuery();
     int count = -1;
-    
+
     while (resultSet.next()) {
       count = resultSet.getInt("total");
     }

@@ -1,7 +1,7 @@
 package ca.cencol.geochat.service;
 
+import java.util.Collection;
 import java.util.Date;
-import java.util.List;
 
 import ca.cencol.geochat.model.Message;
 
@@ -17,7 +17,7 @@ public interface RoomService {
    * 
    * @throws IllegalStateException if {@code userId} tries to get messages from not their current {@code roomId}
    */
-  List<Message> getMessages(String userId, String roomId);
+  Collection<Message> getMessages(String userId, String roomId);
 
   /**
    * Returns {@link Message}s for {@code userId} by {@code roomId} that were posted {@code lastTime}.<br>
@@ -27,7 +27,7 @@ public interface RoomService {
    * 
    * @throws IllegalStateException if {@code userId} tries to get messages from not their current {@code roomId}
    */
-  List<Message> getMessages(String userId, String roomId, Date lastTime);
+  Collection<Message> getMessages(String userId, String roomId, Date lastTime);
 
   /**
    * Return a roomId a {@link User} is currently assigned to.

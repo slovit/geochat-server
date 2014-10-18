@@ -3,16 +3,17 @@ package ca.cencol.geochat.model;
 import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.base.Strings.isNullOrEmpty;
 
-import java.util.List;
+import java.util.Collection;
+import java.util.Queue;
 
-import com.google.common.collect.Lists;
+import com.google.common.collect.EvictingQueue;
 
 public class ChatRoom {
+  
+  public static final int MAX_MESSAGES = 20;
 
   private final String roomId;
-
-  // FIXME: implement with a fixed-size queue
-  private List<Message> messages = Lists.newArrayList();
+  private Queue<Message> messages = EvictingQueue.create(MAX_MESSAGES);
 
   public ChatRoom(String locationId) {
     checkState(!isNullOrEmpty(locationId));
@@ -29,7 +30,7 @@ public class ChatRoom {
     messages.add(createMessage(userId, message));
   }
 
-  public List<Message> getMessages() {
+  public Collection<Message> getMessages() {
     return messages;
   }
 
