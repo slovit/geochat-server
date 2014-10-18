@@ -6,6 +6,7 @@ import static java.lang.String.format;
 import java.util.UUID;
 
 import lombok.NonNull;
+import lombok.Setter;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 import ca.cencol.geochat.dao.DaoFactory;
@@ -23,20 +24,21 @@ import ca.cencol.geochat.service.UsersService;
 @Slf4j
 public class UsersServiceImpl implements UsersService {
 
-  private static final UsersServiceImpl INSTANCE = new UsersServiceImpl();
-  private final UserDao USER_DAO = DaoFactory.createUserDao();
+  private static UsersServiceImpl INSTANCE;
+
+  @Setter
+  private UserDao userDao;
 
   @Override
   public String registerUser(@NonNull RegistrationUser user) {
     log.info("Registering user {}", user);
     checkUsername(user.getUsername());
     checkUsernameUniqueness(user.getUsername());
-    
+
     checkEmail(user.getEmail());
     checkEmailUniqueness(user.getEmail());
-    
+
     checkPassword(user.getPassword());
-    
 
     val userId = UUID.randomUUID().toString();
     val newUser = User.builder()
@@ -46,7 +48,7 @@ public class UsersServiceImpl implements UsersService {
         .password(user.getPassword())
         .build();
 
-    USER_DAO.addUser(newUser);
+    userDao.addUser(newUser);
 
     return userId;
   }
@@ -67,12 +69,12 @@ public class UsersServiceImpl implements UsersService {
   }
 
   private void checkUsernameUniqueness(@NonNull String username) {
-    checkUserState(USER_DAO.countByUsername(username) == 0,
+    checkUserState(userDao.countByUsername(username) == 0,
         format("Username %s is already registered", username));
   }
 
   private void checkEmailUniqueness(@NonNull String email) {
-    checkUserState(USER_DAO.countByEmail(email) == 0,
+    checkUserState(userDao.countByEmail(email) == 0,
         format("Email %s is already used for registration", email));
   }
 
@@ -80,10 +82,23 @@ public class UsersServiceImpl implements UsersService {
   public User getUser(@NonNull String userId) {
     checkState(!userId.isEmpty(), "userId can't be empty");
 
-    return USER_DAO.getById(userId);
+    return userDao.getById(userId);
   }
 
   public static UsersServiceImpl getInstance() {
+    if (INSTANCE == null) {
+      INSTANCE = new UsersServiceImpl();
+      INSTANCE.setUserDao(DaoFactory.createUserDao());
+    }
+
+    return INSTANCE;
+  }
+
+  public static UsersServiceImpl getTestInstance() {
+    if (INSTANCE == null) {
+      INSTANCE = new UsersServiceImpl();
+    }
+
     return INSTANCE;
   }
 
@@ -97,8 +112,8 @@ public class UsersServiceImpl implements UsersService {
   @Override
   public boolean isRegistered(@NonNull String userId) {
     checkState(!userId.isEmpty(), "userId can't be empty");
-    val user = USER_DAO.getById(userId);
-    
+    val user = userDao.getById(userId);
+
     return user == null ? false : true;
   }
 
@@ -108,21 +123,21 @@ public class UsersServiceImpl implements UsersService {
     log.info("Login request from user '{}'", email);
     checkEmail(email);
     checkPassword(loginInfo.getPassword());
-    
-    val user = USER_DAO.getByEmail(email);
+
+    val user = userDao.getByEmail(email);
     if (user == null) {
       denyLogin(format("Have not found user with email: '%s'", email));
     } else if (!isValidPassword(user, loginInfo)) {
       denyLogin(format("User '%s' entered invalid password", email));
     }
-    
+
     return user.getUserId();
   }
-  
+
   private static boolean isValidPassword(User user, LoginRequest loginInfo) {
     return user.getPassword().equals(loginInfo.getPassword());
   }
-  
+
   private static void denyLogin(String logMessage) {
     log.info(logMessage);
     throw new ForbiddenException("Login credentials are incorrect");
