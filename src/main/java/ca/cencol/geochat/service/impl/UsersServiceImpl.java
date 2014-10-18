@@ -7,6 +7,7 @@ import java.util.UUID;
 
 import lombok.NonNull;
 import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 import ca.cencol.geochat.dao.DaoFactory;
 import ca.cencol.geochat.dao.UserDao;
 import ca.cencol.geochat.mapper.BadRequestException;
@@ -17,6 +18,7 @@ import ca.cencol.geochat.service.UsersService;
 /**
  * An in-memory implementation of {@link UsersService}
  */
+@Slf4j
 public class UsersServiceImpl implements UsersService {
 
   private static final UsersServiceImpl INSTANCE = new UsersServiceImpl();
@@ -24,6 +26,7 @@ public class UsersServiceImpl implements UsersService {
 
   @Override
   public String registerUser(@NonNull RegistrationUser user) {
+    log.info("Registering user {}", user);
     checkUsername(user.getUsername());
     checkEmail(user.getEmail());
     checkPassword(user.getPassword());
@@ -44,26 +47,27 @@ public class UsersServiceImpl implements UsersService {
 
   private void checkPassword(String password) {
     checkUserState(password != null, "Missing password field");
+    checkUserState(!password.isEmpty(), "Password can't be empty");
   }
 
   private void checkEmail(String email) {
     checkUserState(email != null, "Missing email field");
+    checkUserState(!email.isEmpty(), "Email can't be empty");
     checkEmailUniqueness(email);
   }
 
   private void checkUsername(String username) {
     checkUserState(username != null, "Missing username field");
+    checkUserState(!username.isEmpty(), "Username can't be empty");
     checkUsernameUniqueness(username);
   }
 
   private void checkUsernameUniqueness(@NonNull String username) {
-    checkUserState(!username.isEmpty(), "Username can't be empty");
     checkUserState(USER_DAO.countByUsername(username) == 0,
         format("Username %s is already registered", username));
   }
 
   private void checkEmailUniqueness(@NonNull String email) {
-    checkUserState(!email.isEmpty(), "Email can't be empty");
     checkUserState(USER_DAO.countByEmail(email) == 0,
         format("Email %s is already used for registration", email));
   }
@@ -81,6 +85,7 @@ public class UsersServiceImpl implements UsersService {
 
   private static void checkUserState(boolean expression, String message) {
     if (!expression) {
+      log.info("{}", message);
       throw new BadRequestException(message);
     }
   }
