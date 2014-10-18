@@ -1,4 +1,4 @@
-package ca.cencol.geochat.test;
+package ca.cencol.geochat;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;

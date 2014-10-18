@@ -1,4 +1,4 @@
-package ca.cencol.geochat.test;
+package ca.cencol.geochat;
 
 import static org.junit.Assert.*;
 
