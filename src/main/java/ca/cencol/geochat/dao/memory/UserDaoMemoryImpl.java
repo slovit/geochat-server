@@ -46,17 +46,37 @@ public class UserDaoMemoryImpl implements UserDao {
 
   @Override
   public int countByUsername(@NonNull String username) {
-    throw new UnsupportedOperationException();
+
+    int count = 0;
+    for (User u : users.values()) {
+      if (u.getUserId().equals(username)) {
+        count++;
+      }
+    }
+    return count;
   }
 
   @Override
   public int countByEmail(@NonNull String email) {
-    throw new UnsupportedOperationException();
+
+    int count = 0;
+    for (User u : users.values()) {
+      if (u.getEmail().equals(email)) {
+        count++;
+      }
+    }
+    return count;
   }
 
   @Override
   public User getByEmail(String email) {
-    throw new UnsupportedOperationException();
+
+    for (User u : users.values()) {
+      if (u.getEmail().equals(email)) {
+        return u;
+      }
+    }
+    return null;
   }
 
 }
