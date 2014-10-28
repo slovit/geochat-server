@@ -9,6 +9,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import ca.cencol.geochat.mapper.NotFoundException;
+import ca.cencol.geochat.model.PrivateProfileResponse;
 import ca.cencol.geochat.model.PublicProfileResponse;
 import ca.cencol.geochat.model.User;
 import ca.cencol.geochat.service.ServiceFactory;
@@ -20,21 +21,23 @@ import com.wordnik.swagger.annotations.ApiParam;
 import com.wordnik.swagger.annotations.ApiResponse;
 import com.wordnik.swagger.annotations.ApiResponses;
 
-@Path("/getProfile")
-@Api(value = "/getProfile", description = "Get profile")
+@Path("/profile")
+@Api(value = "/profile", description = "Profile service")
 @Produces(MediaType.APPLICATION_JSON)
-public class GetProfileResource {
+public class ProfileResource {
 
   private final UsersService usersService = ServiceFactory.createUsersService();
 
   @GET
-  @ApiOperation(httpMethod = "GET", value = "Get profile", notes = "Get profile info by user ID",
+  @ApiOperation(httpMethod = "GET",
+      value = "Get public profile",
+      notes = "Get public profile info by user ID",
       response = PublicProfileResponse.class)
   @ApiResponses(value = {
       @ApiResponse(code = 404, message = "User ID not found") })
-  @Path("/{userId}")
+  @Path("/public/{userId}")
   @Produces(MediaType.APPLICATION_JSON)
-  public PublicProfileResponse getProfile(
+  public PublicProfileResponse getPublicProfile(
       @ApiParam(value = "Unique user identifier", required = true) @PathParam("userId") String userId) {
 
     User user = usersService.getUser(userId);
@@ -44,6 +47,28 @@ public class GetProfileResource {
     }
 
     return new PublicProfileResponse(user.getUserId(), user.getUsername());
+
+  }
+
+  @GET
+  @ApiOperation(httpMethod = "GET",
+      value = "Get private profile",
+      notes = "Get private profile info by user ID",
+      response = PrivateProfileResponse.class)
+  @ApiResponses(value = {
+      @ApiResponse(code = 404, message = "User ID not found") })
+  @Path("/private/{userId}")
+  @Produces(MediaType.APPLICATION_JSON)
+  public PrivateProfileResponse getPrivateProfile(
+      @ApiParam(value = "Unique user identifier", required = true) @PathParam("userId") String userId) {
+
+    User user = usersService.getUser(userId);
+    // check if a user with a given ID exists
+    if (user == null) {
+      throw new NotFoundException(format("User ID %s not found", userId));
+    }
+
+    return new PrivateProfileResponse(user.getUserId(), user.getUsername(), user.getEmail());
 
   }
 }
