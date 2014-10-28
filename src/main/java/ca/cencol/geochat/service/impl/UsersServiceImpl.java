@@ -114,7 +114,7 @@ public class UsersServiceImpl implements UsersService {
     checkState(!userId.isEmpty(), "userId can't be empty");
     val user = userDao.getById(userId);
 
-    return user == null ? false : true;
+    return user != null;
   }
 
   @Override
