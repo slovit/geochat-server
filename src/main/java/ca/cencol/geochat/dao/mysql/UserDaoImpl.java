@@ -65,6 +65,9 @@ public class UserDaoImpl implements UserDao {
       userBuilder.username(resultSet.getString(USERNAME));
       userBuilder.email(resultSet.getString(EMAIL));
       userBuilder.password(resultSet.getString(PASSWORD));
+      userBuilder.imageId(resultSet.getString(IMAGE_ID));
+      userBuilder.additionalInfo(resultSet.getString(ADDITIONAL_INFO));
+
     }
     resultSet.close();
     val user = userBuilder.build();

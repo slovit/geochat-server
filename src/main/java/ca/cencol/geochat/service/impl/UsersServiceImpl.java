@@ -46,6 +46,8 @@ public class UsersServiceImpl implements UsersService {
         .username(user.getUsername())
         .email(user.getEmail())
         .password(user.getPassword())
+        .imageId("")
+        .additionalInfo("")
         .build();
 
     userDao.addUser(newUser);

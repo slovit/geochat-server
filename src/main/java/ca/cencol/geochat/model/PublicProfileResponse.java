@@ -14,4 +14,10 @@ public class PublicProfileResponse {
 
   @ApiModelProperty(value = "Username", required = true)
   String username;
+  
+  @ApiModelProperty(value = "Image ID", required = true)
+  String imageId;
+
+  @ApiModelProperty(value = "Additional info", required = true)
+  String additionalInfo;
 }

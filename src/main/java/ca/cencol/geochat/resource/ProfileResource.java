@@ -46,7 +46,11 @@ public class ProfileResource {
       throw new NotFoundException(format("User ID %s not found", userId));
     }
 
-    return new PublicProfileResponse(user.getUserId(), user.getUsername());
+    return new PublicProfileResponse(
+        user.getUserId(),
+        user.getUsername(),
+        user.getImageId(),
+        user.getAdditionalInfo());
 
   }
 
@@ -68,7 +72,12 @@ public class ProfileResource {
       throw new NotFoundException(format("User ID %s not found", userId));
     }
 
-    return new PrivateProfileResponse(user.getUserId(), user.getUsername(), user.getEmail());
+    return new PrivateProfileResponse(
+        user.getUserId(),
+        user.getUsername(),
+        user.getEmail(),
+        user.getImageId(),
+        user.getAdditionalInfo());
 
   }
 }
