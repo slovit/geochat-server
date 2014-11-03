@@ -34,4 +34,8 @@ public interface UserDao {
    */
   int countByEmail(String email);
 
+  /**
+   * Updates {@code user} and persists it
+   */
+  void updateUser(User user);
 }

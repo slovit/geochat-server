@@ -2,6 +2,7 @@ package ca.cencol.geochat.service;
 
 import ca.cencol.geochat.model.LoginRequest;
 import ca.cencol.geochat.model.RegistrationUser;
+import ca.cencol.geochat.model.UpdateUser;
 import ca.cencol.geochat.model.User;
 
 /**
@@ -28,5 +29,10 @@ public interface UsersService {
    * Logins {@link User}
    */
   String loginUser(LoginRequest user);
+  
+  /**
+   * Updates a {@link User} and persists it.
+   */
+  void updateUser(UpdateUser user);
 
 }

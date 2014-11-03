@@ -13,8 +13,10 @@ import ca.cencol.geochat.dao.DaoFactory;
 import ca.cencol.geochat.dao.UserDao;
 import ca.cencol.geochat.mapper.BadRequestException;
 import ca.cencol.geochat.mapper.ForbiddenException;
+import ca.cencol.geochat.mapper.NotFoundException;
 import ca.cencol.geochat.model.LoginRequest;
 import ca.cencol.geochat.model.RegistrationUser;
+import ca.cencol.geochat.model.UpdateUser;
 import ca.cencol.geochat.model.User;
 import ca.cencol.geochat.service.UsersService;
 
@@ -143,6 +145,35 @@ public class UsersServiceImpl implements UsersService {
   private static void denyLogin(String logMessage) {
     log.info(logMessage);
     throw new ForbiddenException("Login credentials are incorrect");
+  }
+
+  @Override
+  public void updateUser(@NonNull UpdateUser user) {
+    log.info("Updating user {}", user);
+
+    String userId = user.getUserId();
+    if (!isRegistered(userId)) {
+      throw new NotFoundException(format("User ID %s not found", userId));
+    }
+    checkUsername(user.getUsername());
+    checkUsernameUniqueness(user.getUsername());
+
+    checkEmail(user.getEmail());
+    checkEmailUniqueness(user.getEmail());
+
+    checkPassword(user.getPassword());
+
+    val updatedUser = User.builder()
+        .userId(userId)
+        .username(user.getUsername())
+        .email(user.getEmail())
+        .password(user.getPassword())
+        .imageId(user.getImageId())
+        .additionalInfo(user.getAdditionalInfo())
+        .build();
+
+    userDao.updateUser(updatedUser);
+
   }
 
 }
