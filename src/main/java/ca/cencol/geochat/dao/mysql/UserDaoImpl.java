@@ -3,6 +3,7 @@ package ca.cencol.geochat.dao.mysql;
 import static java.lang.String.format;
 import static ca.cencol.geochat.dao.mysql.ColumnNames.User.*;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 
 import lombok.NonNull;
@@ -28,14 +29,18 @@ public class UserDaoImpl implements UserDao {
   @Override
   @SneakyThrows
   public void addUser(@NonNull User user) {
-    val insertStmt = connectionManager.getConnection().prepareStatement(INSERT_USER);
+    val connection = connectionManager.getConnection();
+    val insertStmt = connection.prepareStatement(INSERT_USER);
     insertStmt.setString(1, user.getUserId());
     insertStmt.setString(2, user.getUsername());
     insertStmt.setString(3, user.getEmail());
     insertStmt.setString(4, user.getPassword());
 
     insertStmt.executeUpdate();
+    closeConnection(connection);
   }
+
+  
 
   @Override
   public User getById(@NonNull String userId) {
@@ -49,11 +54,14 @@ public class UserDaoImpl implements UserDao {
   
   @SneakyThrows
   private User getUserByQuery(String query, String searchParameter) {
-    val selectStmt = connectionManager.getConnection().prepareStatement(query);
+    val connection = connectionManager.getConnection();
+    val selectStmt = connection.prepareStatement(query);
     selectStmt.setString(1, searchParameter);
     val resultSet = selectStmt.executeQuery();
+    val user = createUser(resultSet);
+    closeConnection(connection);
 
-    return createUser(resultSet);
+    return user;
   }
 
   @SneakyThrows
@@ -75,7 +83,8 @@ public class UserDaoImpl implements UserDao {
   @Override
   @SneakyThrows
   public int countByUsername(@NonNull String username) {
-    val stmt = connectionManager.getConnection().prepareStatement(COUNT_BY_USERNAME);
+    val connection = connectionManager.getConnection();
+    val stmt = connection.prepareStatement(COUNT_BY_USERNAME);
     stmt.setString(1, username);
     val resultSet = stmt.executeQuery();
     int count = -1;
@@ -84,6 +93,7 @@ public class UserDaoImpl implements UserDao {
       count = resultSet.getInt("total");
     }
     resultSet.close();
+    closeConnection(connection);
 
     return count;
   }
@@ -91,7 +101,8 @@ public class UserDaoImpl implements UserDao {
   @Override
   @SneakyThrows
   public int countByEmail(@NonNull String email) {
-    val stmt = connectionManager.getConnection().prepareStatement(COUNT_BY_EMAIL);
+    val connection = connectionManager.getConnection();
+    val stmt = connection.prepareStatement(COUNT_BY_EMAIL);
     stmt.setString(1, email);
     val resultSet = stmt.executeQuery();
     int count = -1;
@@ -100,8 +111,17 @@ public class UserDaoImpl implements UserDao {
       count = resultSet.getInt("total");
     }
     resultSet.close();
+    closeConnection(connection);
 
     return count;
+  }
+  
+  @SneakyThrows
+  private void closeConnection(Connection connection) {
+    if (connection != null) {
+      connection.close();
+    }
+    
   }
 
   public static UserDao getInstance() {
