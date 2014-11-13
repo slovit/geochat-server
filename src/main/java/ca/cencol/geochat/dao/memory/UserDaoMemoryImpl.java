@@ -78,5 +78,9 @@ public class UserDaoMemoryImpl implements UserDao {
     }
     return null;
   }
-
+  @Override
+  public void updateUser(User user){
+    addUser(user);
+  }
+  
 }
