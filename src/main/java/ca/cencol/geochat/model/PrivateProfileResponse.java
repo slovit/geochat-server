@@ -17,5 +17,11 @@ public class PrivateProfileResponse {
 
   @ApiModelProperty(value = "Email", required = true)
   String email;
+  
+  @ApiModelProperty(value = "Image ID", required = true)
+  String imageId;
+
+  @ApiModelProperty(value = "Additional info", required = true)
+  String additionalInfo;
 
 }

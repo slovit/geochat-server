@@ -17,12 +17,16 @@ public class UserDaoImpl implements UserDao {
 
   private static final UserDaoImpl INSTANCE = new UserDaoImpl();
 
-  private static final String INSERT_USER = format("insert into User (%s, %s, %s, %s) values (?, ?, ?, ?)",
-      USER_ID, USERNAME, EMAIL, PASSWORD);
+  private static final String INSERT_USER = format(
+      "insert into User (%s, %s, %s, %s, %s, %s) values (?, ?, ?, ?, ?, ?)",
+      USER_ID, USERNAME, EMAIL, PASSWORD, IMAGE_ID, ADDITIONAL_INFO);
   private static final String SELECT_BY_ID = format("select * from User where %s = ?", USER_ID);
   private static final String SELECT_BY_EMAIL = format("select * from User where %s = ?", EMAIL);
   private static final String COUNT_BY_EMAIL = format("select count(*) as total from User where %s = ?", EMAIL);
   private static final String COUNT_BY_USERNAME = format("select count(*) as total from User where %s = ?", USERNAME);
+  private static final String UPDATE_USER = format(
+      "update User set %s = ?, %s = ?, %s = ?, %s = ?, %s = ? where %s = ?",
+      USERNAME, EMAIL, PASSWORD, IMAGE_ID, ADDITIONAL_INFO, USER_ID);
 
   private final ConnectionManager connectionManager = ConnectionManager.getInstance();
 
@@ -35,6 +39,8 @@ public class UserDaoImpl implements UserDao {
     insertStmt.setString(2, user.getUsername());
     insertStmt.setString(3, user.getEmail());
     insertStmt.setString(4, user.getPassword());
+    insertStmt.setString(5, user.getImageId());
+    insertStmt.setString(6, user.getAdditionalInfo());
 
     insertStmt.executeUpdate();
     closeConnection(connection);
@@ -46,12 +52,12 @@ public class UserDaoImpl implements UserDao {
   public User getById(@NonNull String userId) {
     return getUserByQuery(SELECT_BY_ID, userId);
   }
-  
+
   @Override
   public User getByEmail(@NonNull String email) {
     return getUserByQuery(SELECT_BY_EMAIL, email);
   }
-  
+
   @SneakyThrows
   private User getUserByQuery(String query, String searchParameter) {
     val connection = connectionManager.getConnection();
@@ -73,6 +79,9 @@ public class UserDaoImpl implements UserDao {
       userBuilder.username(resultSet.getString(USERNAME));
       userBuilder.email(resultSet.getString(EMAIL));
       userBuilder.password(resultSet.getString(PASSWORD));
+      userBuilder.imageId(resultSet.getString(IMAGE_ID));
+      userBuilder.additionalInfo(resultSet.getString(ADDITIONAL_INFO));
+
     }
     resultSet.close();
     val user = userBuilder.build();
@@ -126,6 +135,23 @@ public class UserDaoImpl implements UserDao {
 
   public static UserDao getInstance() {
     return INSTANCE;
+  }
+
+  @Override
+  @SneakyThrows
+  public void updateUser(@NonNull User user) {
+    val connection = connectionManager.getConnection();
+    val insertStmt = connection.prepareStatement(UPDATE_USER);
+
+    insertStmt.setString(1, user.getUsername());
+    insertStmt.setString(2, user.getEmail());
+    insertStmt.setString(3, user.getPassword());
+    insertStmt.setString(4, user.getImageId());
+    insertStmt.setString(5, user.getAdditionalInfo());
+    insertStmt.setString(6, user.getUserId());
+
+    insertStmt.executeUpdate();
+    closeConnection(connection);
   }
 
 }

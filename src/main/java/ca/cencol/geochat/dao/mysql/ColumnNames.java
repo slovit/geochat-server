@@ -12,6 +12,8 @@ public final class ColumnNames {
     public static final String USERNAME = "username";
     public static final String EMAIL = "email";
     public static final String PASSWORD = "password";
+    public static final String IMAGE_ID = "image_id";
+    public static final String ADDITIONAL_INFO = "additional_info";
   }
 
 }

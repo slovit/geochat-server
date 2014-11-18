@@ -173,6 +173,8 @@ public class UsersServiceImplTest {
         .username("username")
         .email("test@test.org")
         .password("pass")
+        .imageId("")
+        .additionalInfo("")
         .build();
   }
   

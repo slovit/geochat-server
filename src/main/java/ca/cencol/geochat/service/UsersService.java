@@ -28,5 +28,15 @@ public interface UsersService {
    * Logins {@link User}
    */
   String loginUser(LoginRequest user);
+  
+  /**
+   * Updates additional info for the given {@code userId} and persists it.
+   */
+  void updateAdditionalInfo(String userId, String addInfo);
+  
+  /**
+   * Updates image ID for the given {@code userId} and persists it.
+   */
+  void updateImageId(String userId, String imageId);
 
 }
