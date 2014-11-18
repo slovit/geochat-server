@@ -13,9 +13,9 @@ import javax.ws.rs.core.Response;
 
 import ca.cencol.geochat.mapper.NotFoundException;
 import ca.cencol.geochat.model.PrivateProfileResponse;
+import ca.cencol.geochat.model.ProfileNewValue;
 import ca.cencol.geochat.model.PublicProfileResponse;
 import ca.cencol.geochat.model.User;
-import ca.cencol.geochat.model.UpdateUser;
 import ca.cencol.geochat.service.ServiceFactory;
 import ca.cencol.geochat.service.UsersService;
 
@@ -84,16 +84,35 @@ public class ProfileResource {
         user.getAdditionalInfo());
 
   }
-
+  
   @POST
-  @ApiOperation(httpMethod = "POST", value = "Update a profile")
+  @ApiOperation(httpMethod = "POST", value = "Update additional info")
   @ApiResponses(value = {
-      @ApiResponse(code = 200, message = "User profile has been updated"),
-      @ApiResponse(code = 404, message = "User ID not found") })
+      @ApiResponse(code = 200, message = "Additional info has been updated"),
+      @ApiResponse(code = 404, message = "User ID not found")})
+  @Path("/addInfo/{userId}")
   @Consumes(MediaType.APPLICATION_JSON)
-  @Produces(MediaType.APPLICATION_JSON)
-  public Response register(@ApiParam(value = "Profile information", required = true) UpdateUser userInfo) {
-    usersService.updateUser(userInfo);
+  public Response updateAdditionalInfo(
+      @ApiParam(value = "Unique user identifier", required = true) @PathParam("userId") String userId,
+      @ApiParam(value = "Profile new value", required = true) ProfileNewValue newValue) {
+
+    usersService.updateAdditionalInfo(userId, newValue.toString());
+
+    return Response.ok().build();
+  }
+  
+  @POST
+  @ApiOperation(httpMethod = "POST", value = "Update image ID")
+  @ApiResponses(value = {
+      @ApiResponse(code = 200, message = "Image ID has been updated"),
+      @ApiResponse(code = 404, message = "User ID not found")})
+  @Path("/imageId/{userId}")
+  @Consumes(MediaType.APPLICATION_JSON)
+  public Response updateImageId(
+      @ApiParam(value = "Unique user identifier", required = true) @PathParam("userId") String userId,
+      @ApiParam(value = "Profile new value", required = true) ProfileNewValue newValue) {
+
+    usersService.updateImageId(userId, newValue.toString());
 
     return Response.ok().build();
   }

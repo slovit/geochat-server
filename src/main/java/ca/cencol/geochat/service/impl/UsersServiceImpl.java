@@ -16,7 +16,6 @@ import ca.cencol.geochat.mapper.ForbiddenException;
 import ca.cencol.geochat.mapper.NotFoundException;
 import ca.cencol.geochat.model.LoginRequest;
 import ca.cencol.geochat.model.RegistrationUser;
-import ca.cencol.geochat.model.UpdateUser;
 import ca.cencol.geochat.model.User;
 import ca.cencol.geochat.service.UsersService;
 
@@ -147,33 +146,45 @@ public class UsersServiceImpl implements UsersService {
     throw new ForbiddenException("Login credentials are incorrect");
   }
 
-  @Override
-  public void updateUser(@NonNull UpdateUser user) {
-    log.info("Updating user {}", user);
-
-    String userId = user.getUserId();
+  public void updateAdditionalInfo(String userId, String addInfo){
+    log.info("Updating user's additional info {}", userId);
+    
     if (!isRegistered(userId)) {
       throw new NotFoundException(format("User ID %s not found", userId));
     }
-    checkUsername(user.getUsername());
-    checkUsernameUniqueness(user.getUsername());
-
-    checkEmail(user.getEmail());
-    checkEmailUniqueness(user.getEmail());
-
-    checkPassword(user.getPassword());
-
+    
+    User user = getUser(userId);
+    
     val updatedUser = User.builder()
         .userId(userId)
         .username(user.getUsername())
         .email(user.getEmail())
         .password(user.getPassword())
         .imageId(user.getImageId())
+        .additionalInfo(addInfo)
+        .build();
+
+    userDao.updateUser(updatedUser);
+  }
+
+  public void updateImageId(String userId, String imageId) {
+    log.info("Updating user's image ID {}", userId);
+
+    if (!isRegistered(userId)) {
+      throw new NotFoundException(format("User ID %s not found", userId));
+    }
+
+    User user = getUser(userId);
+
+    val updatedUser = User.builder()
+        .userId(userId)
+        .username(user.getUsername())
+        .email(user.getEmail())
+        .password(user.getPassword())
+        .imageId(imageId)
         .additionalInfo(user.getAdditionalInfo())
         .build();
 
     userDao.updateUser(updatedUser);
-
   }
-
 }

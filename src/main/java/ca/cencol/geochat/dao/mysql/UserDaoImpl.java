@@ -24,7 +24,7 @@ public class UserDaoImpl implements UserDao {
   private static final String COUNT_BY_EMAIL = format("select count(*) as total from User where %s = ?", EMAIL);
   private static final String COUNT_BY_USERNAME = format("select count(*) as total from User where %s = ?", USERNAME);
   private static final String UPDATE_USER = format(
-      "update User set %s = ?, %s = ?, %s = ?, %s = ?, %s = '?' where %s = ?",
+      "update User set %s = ?, %s = ?, %s = ?, %s = ?, %s = ? where %s = ?",
       USERNAME, EMAIL, PASSWORD, IMAGE_ID, ADDITIONAL_INFO, USER_ID);
 
   private final ConnectionManager connectionManager = ConnectionManager.getInstance();
