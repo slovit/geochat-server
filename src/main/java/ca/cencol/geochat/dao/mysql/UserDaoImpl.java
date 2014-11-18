@@ -140,7 +140,8 @@ public class UserDaoImpl implements UserDao {
   @Override
   @SneakyThrows
   public void updateUser(@NonNull User user) {
-    val insertStmt = connectionManager.getConnection().prepareStatement(UPDATE_USER);
+    val connection = connectionManager.getConnection();
+    val insertStmt = connection.prepareStatement(UPDATE_USER);
 
     insertStmt.setString(1, user.getUsername());
     insertStmt.setString(2, user.getEmail());
@@ -150,6 +151,7 @@ public class UserDaoImpl implements UserDao {
     insertStmt.setString(6, user.getUserId());
 
     insertStmt.executeUpdate();
+    closeConnection(connection);
   }
 
 }
