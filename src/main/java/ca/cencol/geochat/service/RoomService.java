@@ -20,16 +20,6 @@ public interface RoomService {
   Collection<Message> getMessages(String userId, String roomId);
 
   /**
-   * Returns {@link Message}s for {@code userId} by {@code roomId} that were posted {@code lastTime}.<br>
-   * If the room does not exist creates a new one and returns an empty list.<br>
-   * If there is no messages posted after the given time returns an empty list.<br>
-   * New messages for the user should be pulled with this service.
-   * 
-   * @throws IllegalStateException if {@code userId} tries to get messages from not their current {@code roomId}
-   */
-  Collection<Message> getMessages(String userId, String roomId, Date lastTime);
-
-  /**
    * Return a roomId a {@link User} is currently assigned to.
    */
   String getUserRoom(String userId);

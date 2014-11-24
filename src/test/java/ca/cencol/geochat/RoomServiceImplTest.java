@@ -55,10 +55,6 @@ public class RoomServiceImplTest {
   public void testGetMessages() {
     Collection<Message> msgList = roomService.getMessages(user1Room1, roomId1);
     assertEquals(2, msgList.size());
-    msgList = roomService.getMessages(user1Room1, roomId1, date2);
-    assertEquals(1, msgList.size());
-    msgList = roomService.getMessages(user1Room1, roomId1, date3);
-    assertEquals(0, msgList.size());
   }
 
   @Test(expected = NotFoundException.class)
