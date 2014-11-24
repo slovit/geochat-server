@@ -35,6 +35,13 @@ public class RoomServiceImpl implements RoomService {
 
   @Override
   public Collection<Message> getMessages(String userId, String roomId) {
+
+    // return all messages for the user in the room from the "beginning of time"
+    return getMessages(userId, roomId, new Date(0));
+  }
+
+  @Override
+  public Collection<Message> getMessages(String userId, String roomId, Date lastTime) {
     checkState(!isNullOrEmpty(roomId), "Null or empty roomId");
 
     if (!isCurrentRoom(userId, roomId)) {
@@ -44,7 +51,7 @@ public class RoomServiceImpl implements RoomService {
     // Get messages for user
     ChatRoom room = checkAndCreateChatRoom(roomId);
 
-    return room.getMessages();
+    return getMessagesAfterTime(room.getMessages(), lastTime);
   }
 
   private Collection<Message> getMessagesAfterTime(Collection<Message> messages, Date time) {
